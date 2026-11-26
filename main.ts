@@ -7,5 +7,11 @@ import { mkdirSync, writeFileSync } from "node:fs";
 const GREETING =
   "It's Mochi. I knocked your glass off the table, then I knocked the phone off too. Leave a message. I regret nothing.";
 
+// The gate only accepts 1 to 120 characters of non-blank UTF-8 text.
+// Refuse to write an invalid entry rather than ship one silently.
+if (GREETING.length < 1 || GREETING.length > 120 || GREETING.trim().length === 0) {
+  throw new Error(`greeting is ${GREETING.length} characters; the gate needs 1-120`);
+}
+
 mkdirSync("/output", { recursive: true });
 writeFileSync("/output/entry.txt", GREETING, "utf8");
